@@ -1,20 +1,22 @@
-import { Context } from "egg";
-import * as jwt from "jsonwebtoken";
+import { Context } from 'egg';
+import * as jwt from 'jsonwebtoken';
 
 export default () => async (ctx: Context, next) => {
   const whiteUrl = [
-    "/api/regist",
-    "/api/login",
-    "/api/isLogining",
-    "/swagger-ui.html",
-    "/swagger-doc",
-    "/swagger-ui.css",
-    "/swagger-ui-bundle.js",
-    "/swagger-ui-standalone-preset.js"
+    '/api/regist',
+    '/api/login',
+    '/api/isLogining',
+    '/swagger-ui.html',
+    '/swagger-doc',
+    '/swagger-ui.css',
+    '/swagger-ui-bundle.js',
+    '/swagger-ui-standalone-preset.js',
   ];
   if (!whiteUrl.includes(ctx.request.url)) {
     // 判断jwt
-    const authorization: any = ctx.request.header.authorization;
+    console.log([].filter((item) => {}));
+
+    const { authorization } = ctx.request.header;
     if (authorization) {
       try {
         jwt.verify(authorization, ctx.app.config.tokenConfig.secret);
@@ -22,7 +24,7 @@ export default () => async (ctx: Context, next) => {
         ctx.status = 200;
         ctx.body = {
           code: 403,
-          msg: "请先登录！",
+          msg: '请先登录！',
           data: {},
         };
         return;
@@ -31,7 +33,7 @@ export default () => async (ctx: Context, next) => {
       ctx.status = 200;
       ctx.body = {
         code: 401,
-        msg: "请先登录",
+        msg: '请先登录',
         data: {},
       };
       return;

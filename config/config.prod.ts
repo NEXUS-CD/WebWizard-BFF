@@ -8,9 +8,7 @@ const mongoDB = {
 };
 
 export default () => {
-
-  const config: PowerPartial<EggAppConfig> = {
-  };
+  const config: PowerPartial<EggAppConfig> = {};
 
   config.mongoose = mongoDB;
 

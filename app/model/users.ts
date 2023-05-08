@@ -11,8 +11,8 @@ export interface InterUserSchema extends Document {
 }
 
 export default (app) => {
-  const mongoose = app.mongoose;
-  const Schema = mongoose.Schema;
+  const { mongoose } = app;
+  const { Schema } = mongoose;
   const userSchame = new Schema(
     {
       username: { type: String },
@@ -27,7 +27,7 @@ export default (app) => {
     {
       usePushEach: true,
       timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' },
-    },
+    }
   );
   return mongoose.model('user', userSchame);
 };

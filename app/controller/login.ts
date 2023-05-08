@@ -1,9 +1,9 @@
-import { Controller } from "egg";
-import * as utility from "utility";
-import * as moment from "moment";
-import * as _ from "lodash";
-import * as jwt from "jsonwebtoken";
-import { userSchema } from "../validators/user";
+import { Controller } from 'egg';
+import * as utility from 'utility';
+import * as moment from 'moment';
+import * as _ from 'lodash';
+import * as jwt from 'jsonwebtoken';
+import { userSchema } from '../validators/user';
 /**
  * @controller HomeController
  */
@@ -11,7 +11,7 @@ export default class HomeController extends Controller {
   async regist() {
     const user = this.ctx.request.body;
     // 密码加密
-    user.password = utility.md5(user.password, "base64");
+    user.password = utility.md5(user.password, 'base64');
     // 判断当前用户名是否存在
     const findUser = await this.ctx.model.Users.find({
       username: user.username,
@@ -20,7 +20,7 @@ export default class HomeController extends Controller {
       this.ctx.failure({ code: 10003 });
     } else {
       await this.service.login.regist(user);
-      this.ctx.success({ msg: "注册成功" });
+      this.ctx.success({ msg: '注册成功' });
     }
   }
 
@@ -36,9 +36,9 @@ export default class HomeController extends Controller {
     const { ctx, app } = this;
     const user = ctx.request.body;
     // 校验参数
-    if (! await userSchema.triggerValidation(ctx, user)) return
+    if (!(await userSchema.triggerValidation(ctx, user))) return;
     // 密码加密
-    user.password = utility.md5(user.password, "base64");
+    user.password = utility.md5(user.password, 'base64');
 
     const userMsg = await this.service.login.findOne({
       username: user.username,
@@ -65,9 +65,9 @@ export default class HomeController extends Controller {
             }
           );
           ctx.success({
-            msg: "登陆成功",
+            msg: '登陆成功',
             data: {
-              userMsg: _.omit(userMsg.toObject(), "password"),
+              userMsg: _.omit(userMsg.toObject(), 'password'),
               authorization,
             },
           });
@@ -83,7 +83,7 @@ export default class HomeController extends Controller {
 
   // 判断用户当前是否登录
   async isLogin() {
-    const authorization: any = this.ctx.header.authorization;
+    const { authorization } = this.ctx.header;
     // 判断用户当前是否登录
     if (authorization) {
       this.ctx.status = 200;
@@ -103,24 +103,22 @@ export default class HomeController extends Controller {
               moment(new Date()).valueOf()
           ) {
             this.ctx.success({
-              msg: "登陆中",
-              data: { isLogining: "logining", _id: userMsg._id },
+              msg: '登陆中',
+              data: { isLogining: 'logining', _id: userMsg._id },
             });
             return;
-          } else {
-            this.ctx.success({ data: { isLogining: "AccountOverDue" } });
-            return;
           }
-        } else {
-          this.ctx.success({ data: { isLogining: "userNotExist" } });
+          this.ctx.success({ data: { isLogining: 'AccountOverDue' } });
           return;
         }
+        this.ctx.success({ data: { isLogining: 'userNotExist' } });
+        return;
       } catch (error) {
-        this.ctx.success({ data: { isLogining: "jwtOverDue" } });
+        this.ctx.success({ data: { isLogining: 'jwtOverDue' } });
         return;
       }
     }
-    this.ctx.success({ data: { isLogining: "nothingness" } });
+    this.ctx.success({ data: { isLogining: 'nothingness' } });
   }
 
   // 获取一个用户信息
@@ -129,8 +127,8 @@ export default class HomeController extends Controller {
     const res = await this.service.login.findOne(params);
     if (res) {
       this.ctx.success({
-        msg: "查找成功",
-        data: _.omit(res.toObject(), "password"),
+        msg: '查找成功',
+        data: _.omit(res.toObject(), 'password'),
       });
       return;
     }
@@ -140,8 +138,8 @@ export default class HomeController extends Controller {
   // 修改用户密码
   async updateUserPwd() {
     const user = this.ctx.request.body;
-    user.password = utility.md5(user.password, "base64");
-    user.newPassword = utility.md5(user.newPassword, "base64");
+    user.password = utility.md5(user.password, 'base64');
+    user.newPassword = utility.md5(user.newPassword, 'base64');
 
     const userOne: any = await this.service.login.findOne({
       username: user.username,
@@ -151,7 +149,7 @@ export default class HomeController extends Controller {
         const res = await this.service.login.update(user);
         if (res.ok) {
           this.ctx.success({
-            msg: "修改密码成功！",
+            msg: '修改密码成功！',
             data: {},
           });
         }

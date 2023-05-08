@@ -1,14 +1,14 @@
-const { execSync } = require("child_process");
-const path = require("path");
-const fs = require("fs");
-const parse = require("mongodb-uri").parse;
-const os = require("os");
+const { execSync } = require('child_process');
+const path = require('path');
+const fs = require('fs');
+const parse = require('mongodb-uri').parse;
+const os = require('os');
 
 /**
  * 根据不同的环境变量，读取 ts 文件中的 mongodb 配置信息
  */
 function mongoConf() {
-  const env = process.env.MIGRATION_ENV || "local";
+  const env = process.env.MIGRATION_ENV || 'local';
   const cfgPath = path.join(__dirname, `/config.${env}`);
   let config;
   let jsExists = false;
@@ -19,7 +19,7 @@ function mongoConf() {
   if (fs.existsSync(`${cfgPath}.ts`)) {
     if (!jsExists) {
       // 使用 tsc 编译 配置文件中的 ts 文件
-      os.type() === "Windows_NT"
+      os.type() === 'Windows_NT'
         ? execSync(
             path.join(__dirname, `../node_modules/.bin/tsc ${cfgPath}.ts`)
           )
@@ -35,7 +35,7 @@ function mongoConf() {
   }
 
   if (configModule.__esModule) {
-    config = configModule.default({ name: "intelligence-api" });
+    config = configModule.default({ name: 'intelligence-api' });
   } else {
     config = configModule();
   }
@@ -46,13 +46,13 @@ const { url, options = {} } = mongoConf();
 module.exports = {
   mongodb: {
     url,
-    databaseName: options.dbName || parse(url).database || "intelligence",
+    databaseName: options.dbName || parse(url).database || 'intelligence',
 
     options: {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     },
   },
-  migrationsDir: "migrations",
-  changelogCollectionName: "changelog",
+  migrationsDir: 'migrations',
+  changelogCollectionName: 'changelog',
 };

@@ -1,12 +1,12 @@
 module.exports = {
   async up(db) {
     const now = new Date();
-    await db.collection("users").insertMany([
+    await db.collection('users').insertMany([
       {
-        username: "admin",
-        password: "YsitChXZ0co41d7nYqFuAQ==",
+        username: 'admin',
+        password: 'YsitChXZ0co41d7nYqFuAQ==',
         expire: -1,
-        group: ["user"],
+        group: ['user'],
         createTime: now,
         updateTime: now,
       },
@@ -14,6 +14,6 @@ module.exports = {
   },
 
   async down(db) {
-    await db.collection("users").deleteMany({ username: "admin" });
+    await db.collection('users').deleteMany({ username: 'admin' });
   },
 };

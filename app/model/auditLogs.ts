@@ -1,8 +1,8 @@
 // import { Application } from "egg";
 
 export default (app) => {
-  const mongoose = app.mongoose;
-  const Schema = mongoose.Schema;
+  const { mongoose } = app;
+  const { Schema } = mongoose;
   const auditLogsSchema = new Schema(
     {
       visitorIp: String,
@@ -15,8 +15,8 @@ export default (app) => {
     },
     {
       usePushEach: true,
-      timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' }
+      timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' },
     }
   );
-  return mongoose.model('auditLog', auditLogsSchema)
-}
+  return mongoose.model('auditLog', auditLogsSchema);
+};

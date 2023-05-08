@@ -1,7 +1,7 @@
-import { EggAppConfig, PowerPartial } from "egg";
+import { EggAppConfig, PowerPartial } from 'egg';
 
 const mongoDB = {
-  url: "mongodb://127.0.0.1:27017/WebWizard",
+  url: 'mongodb://127.0.0.1:27017/WebWizard',
   option: {
     useNewUrlParser: true,
   },
