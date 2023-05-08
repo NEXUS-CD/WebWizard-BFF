@@ -45,15 +45,11 @@ const errorCode = {
   // 80003: '删除消息失败',
 };
 
-const errorMsg = (code = 0): string => {
-  return code === 0 ? '' : errorCode[code] || errorCode[20002];
-};
+const errorMsg = (code = 0): string =>
+  code === 0 ? '' : errorCode[code] || errorCode[20002];
 
 const encrypt = (text: string, secret: string): string => {
-  const key = crypto
-    .createHash('sha256')
-    .update(secret)
-    .digest();
+  const key = crypto.createHash('sha256').update(secret).digest();
   const iv = crypto.randomBytes(16);
   const cipher = crypto.createCipheriv(CRYPTO_ALGORITHM, key, iv);
   let crypted = cipher.update(text, 'utf8', 'hex');
@@ -62,10 +58,7 @@ const encrypt = (text: string, secret: string): string => {
 };
 
 const decrypt = (text: string, secret: string): string => {
-  const key = crypto
-    .createHash('sha256')
-    .update(secret)
-    .digest();
+  const key = crypto.createHash('sha256').update(secret).digest();
   const ivDataBuffer = Buffer.from(text.slice(CRYPTO_IV_PREFIX.length), 'hex');
   const iv = ivDataBuffer.slice(0, 16);
   const decipher = crypto.createDecipheriv(CRYPTO_ALGORITHM, key, iv);
@@ -74,12 +67,8 @@ const decrypt = (text: string, secret: string): string => {
   return dec;
 };
 
-const md5 = (text: string): string => {
-  return crypto
-    .createHash('md5')
-    .update(text)
-    .digest('hex');
-};
+const md5 = (text: string): string =>
+  crypto.createHash('md5').update(text).digest('hex');
 
 function aesEncrypt(data: string, key: string) {
   const cipher = crypto.createCipher('aes192', key);

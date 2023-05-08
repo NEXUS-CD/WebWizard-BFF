@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 services:
   redis:
     image: 'redis:latest'
@@ -15,7 +15,7 @@ services:
       - '27017:27017'
     networks:
       - WebWizard
-      
+
 networks:
-    WebWizard:
-      driver: bridge
+  WebWizard:
+    driver: bridge

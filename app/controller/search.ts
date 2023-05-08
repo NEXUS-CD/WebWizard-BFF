@@ -1,13 +1,18 @@
 import { Controller } from 'egg';
-import * as jwt from "jsonwebtoken";
+import * as jwt from 'jsonwebtoken';
 
 export default class HomeController extends Controller {
   async searchMsg() {
-    const searchCon = this.ctx.query.searchCon;
-    const authorization: any = this.ctx.header.authorization;
+    const { searchCon } = this.ctx.query;
+    const { authorization } = this.ctx.header;
     const url = this.ctx.routerPath;
-    const user: any = jwt.verify(authorization, this.ctx.app.config.tokenConfig.secret);
-    const userMsg = await this.service.login.findOne({ username: user.username });
+    const user: any = jwt.verify(
+      authorization,
+      this.ctx.app.config.tokenConfig.secret
+    );
+    const userMsg = await this.service.login.findOne({
+      username: user.username,
+    });
     // 更新用户查询次数
     if (userMsg.queried < userMsg.queries) {
       this.ctx.service.login.updatQueried(userMsg);
@@ -18,13 +23,15 @@ export default class HomeController extends Controller {
 
     // 获取用户ip 写入查询日志
     let ip: any = '';
-    const forwardedIpsStr: any = this.ctx.request.headers['x-forwarded-for'];//判断是否有反向代理头信息
+    const forwardedIpsStr: any = this.ctx.request.headers['x-forwarded-for']; // 判断是否有反向代理头信息
 
-    if (forwardedIpsStr) {//如果有，则将头信息中第一个地址拿出，该地址就是真实的客户端IP；
-      var forwardedIps = forwardedIpsStr.split(',');
+    if (forwardedIpsStr) {
+      // 如果有，则将头信息中第一个地址拿出，该地址就是真实的客户端IP；
+      const forwardedIps = forwardedIpsStr.split(',');
       ip = forwardedIps[0];
     }
-    if (!ip) {//如果没有直接获取IP；
+    if (!ip) {
+      // 如果没有直接获取IP；
       ip = this.ctx.req.connection.remoteAddress;
     }
 
@@ -36,7 +43,7 @@ export default class HomeController extends Controller {
       visitorIp: ip,
       visitUrl: url,
       searchCon,
-    })
+    });
 
     const res = await this.service.search.searchMsg(searchCon);
     if (res.status_code === '2000') {
